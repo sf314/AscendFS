@@ -57,25 +57,38 @@ void setup() {
         dataFile.close();
     }
 }
+// ***** Keep track of time!
+unsigned long previousTime = 0;
+long interval = 1000; // in ms
 
 void loop() {
-    Serial.println(logNumber);
-    dataFile = SD.open("test.csv"); // ***** Open file
 
-    // Altitude
-    double altCM = (double)baro.getHeightCentiMeters();
+    // Check if interval of time has passed
+    unsigned long currentTime = millis();
 
-    // Temperature
-    double t1 = temp1.read();
-    double t2 = temp2.read();
-    double t3 = temp3.read();
+    if (currentTime - previousTime >= interval) { // If it's time, take data
+        // Reset time
+        previousTime = currentTime;
 
-    // Heater
-    heatPad.setHeat(255);
+        Serial.println(logNumber);
+        dataFile = SD.open("test.csv"); // ***** Open file
 
-    dataFile.println(String(logNumber) + ", " + String(altCM) + ", " + String(t1) + ", " + String(t2) + ", " + String(t3));
-    dataFile.close(); // Close file
+        // Altitude
+        double altCM = (double)baro.getHeightCentiMeters();
 
-    // Perform smart wait
-    delay(1000);
+        // Temperature
+        double t1 = temp1.read();
+        double t2 = temp2.read();
+        double t3 = temp3.read();
+
+        // Heater
+        heatPad.setHeat(255);
+
+        dataFile.println(String(logNumber) + ", " + String(altCM) + ", " + String(t1) + ", " + String(t2) + ", " + String(t3));
+        dataFile.close(); // Close file
+
+    }
+
+
+
 }
