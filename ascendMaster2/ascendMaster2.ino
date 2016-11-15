@@ -60,7 +60,7 @@ void setup() {
 
 void loop() {
     Serial.println(logNumber);
-    dataFile = SD.open("test.csv");
+    dataFile = SD.open("test.csv"); // ***** Open file
 
     // Altitude
     double altCM = (double)baro.getHeightCentiMeters();
@@ -74,7 +74,7 @@ void loop() {
     heatPad.setHeat(255);
 
     dataFile.println(String(logNumber) + ", " + String(altCM) + ", " + String(t1) + ", " + String(t2) + ", " + String(t3));
-    dataFile.close();
+    dataFile.close(); // Close file
 
     // Perform smart wait
     delay(1000);
