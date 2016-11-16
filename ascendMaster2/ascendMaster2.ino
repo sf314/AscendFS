@@ -1,6 +1,6 @@
 // Retry of master code, but with SD built in (rather than external library)
 
-// **** Inclusions
+// **** Inclusions test
 #include <Wire.h>
 #include <SPI.h>
 #include <SD.h>
@@ -17,6 +17,7 @@ int logNumber = 1;
 
 // Data logging! (try formatting SD card to FAT16)
 File dataFile;
+String fileName = "thing.csv";
 int sdPin = 10;
 
 void setup() {
@@ -50,7 +51,7 @@ void setup() {
     if (usingSD) {Serial.println("Using SD!!!!!");}
 
     // **** Create file headers
-    dataFile = SD.open("test.csv", FILE_WRITE); // later, just call with filename
+    dataFile = SD.open(fileName, FILE_WRITE); // later, just call with filename
     if (dataFile) {
         Serial.println("File opened successfully");
         dataFile.println("Col1, Col2, Col3, Col4, Col5");
@@ -70,22 +71,34 @@ void loop() {
         // Reset time
         previousTime = currentTime;
 
-        Serial.println(logNumber);
-        dataFile = SD.open("test.csv"); // ***** Open file
+        Serial.println(String(logNumber));
+        dataFile = SD.open(fileName, FILE_WRITE); // ***** Open file with options!
 
         // Altitude
         double altCM = (double)baro.getHeightCentiMeters();
+        Serial.println("Alt:");
+        Serial.println(altCM);
 
         // Temperature
         double t1 = temp1.read();
         double t2 = temp2.read();
         double t3 = temp3.read();
+        Serial.println("Temps:");
+        Serial.println(t1);
+        Serial.println(t2);
+        Serial.println(t3);
 
         // Heater
         heatPad.setHeat(255);
 
-        dataFile.println(String(logNumber) + ", " + String(altCM) + ", " + String(t1) + ", " + String(t2) + ", " + String(t3));
+        //dataFile.println(logNumber + ", " + altCM + ", " + t1 + ", " + t2 + ", " + t3);
+        String dataString = String(logNumber) + "," + String(altCM) + "," + String(t1) + "," + String(t2) + "," + String(t3);
+
+        dataFile.println(dataString);
+
         dataFile.close(); // Close file
+        logNumber++;
+        Serial.print("Hello ");
 
     }
 
