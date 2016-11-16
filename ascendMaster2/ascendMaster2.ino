@@ -95,6 +95,7 @@ void loop() {
         String dataString = String(logNumber) + "," + String(altCM) + "," + String(t1) + "," + String(t2) + "," + String(t3);
 
         dataFile.println(dataString);
+        // Hey there!
 
         dataFile.close(); // Close file
         logNumber++;
