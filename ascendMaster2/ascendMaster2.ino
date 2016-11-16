@@ -17,7 +17,7 @@ int logNumber = 1;
 
 // Data logging! (try formatting SD card to FAT16)
 File dataFile;
-String fileName = "thing.csv";
+String fileName = "the.csv";
 int sdPin = 10;
 
 void setup() {
@@ -35,6 +35,7 @@ void setup() {
 
     // ***** Data logging setup
     pinMode(sdPin, OUTPUT);
+    delay(1000);
 
     int tries = 5;
     bool usingSD = false;
@@ -51,11 +52,14 @@ void setup() {
     if (usingSD) {Serial.println("Using SD!!!!!");}
 
     // **** Create file headers
-    dataFile = SD.open(fileName, FILE_WRITE); // later, just call with filename
+    dataFile = SD.open("lizard.csv", FILE_WRITE); // later, just call with filename
     if (dataFile) {
         Serial.println("File opened successfully");
         dataFile.println("Col1, Col2, Col3, Col4, Col5");
         dataFile.close();
+    } else {
+        Serial.println("dataFile returned false!!!!!!!");
+        delay(1000);
     }
 }
 // ***** Keep track of time!
@@ -71,8 +75,7 @@ void loop() {
         // Reset time
         previousTime = currentTime;
 
-        Serial.println(String(logNumber));
-        dataFile = SD.open(fileName, FILE_WRITE); // ***** Open file with options!
+        Serial.println(logNumber);
 
         // Altitude
         double altCM = (double)baro.getHeightCentiMeters();
@@ -92,11 +95,23 @@ void loop() {
         heatPad.setHeat(255);
 
         //dataFile.println(logNumber + ", " + altCM + ", " + t1 + ", " + t2 + ", " + t3);
-        String dataString = String(logNumber) + "," + String(altCM) + "," + String(t1) + "," + String(t2) + "," + String(t3);
+        //String dataString = String(logNumber) + "," + String(altCM) + "," + String(t1) + "," + String(t2) + "," + String(t3);
 
-        dataFile.println(dataString);
-        // Hey there!
+        //dataString = altCM;
+        Serial.print("This is rawTemp: ");
+        Serial.println(temp1.read());
 
+        Serial.print("This is string rawTemp: ");
+        String altString = String(temp1.read());
+        Serial.println(altString);
+
+
+        // ***** Write stuff here!!
+        dataFile = SD.open("lizard .csv", FILE_WRITE); // ***** Open file with options!
+        dataFile.println(altCM);
+        dataFile.close(); // Close file
+        dataFile.close(); // Close file
+        dataFile.close(); // Close file
         dataFile.close(); // Close file
         logNumber++;
         Serial.print("Hello ");
