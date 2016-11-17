@@ -50,7 +50,7 @@ void setup() {
     if (usingSD) {Serial.println("Using SD!!!!!");}
 
     // **** Create file headers
-    dataFile = SD.open("stuff.csv", FILE_WRITE); // later, just call with filename
+    dataFile = SD.open("rubbish.csv", FILE_WRITE); // later, just call with filename
     if (dataFile) {
         Serial.println("File opened successfully");
         dataFile.println("Col1, Col2, Col3, Col4, Col5");
@@ -60,69 +60,58 @@ void setup() {
         delay(1000);
     }
 }
-// ***** Keep track of time!
-unsigned long previousTime = 0;
-long interval = 1000; // in ms
 
 void loop() {
 
-    // Check if interval of time has passed
-    unsigned long currentTime = millis();
+    Serial.println("Hello there");
+    Serial.println(logNumber);
 
-    if (currentTime - previousTime >= interval) { // If it's time, take data
-        // Reset time
-        previousTime = currentTime;
+    // Altitude
+    double altCM = (double)baro.getHeightCentiMeters();
+    Serial.println("Alt:");
+    Serial.println(altCM);
 
-        Serial.println("Hello there");
-        Serial.println(logNumber);
+    // Temperature
+    double t1 = temp1.read();
+    double t2 = temp2.read();
+    double t3 = temp3.read();
+    Serial.println("Temps:");
+    Serial.println(t1);
+    Serial.println(t2);
+    Serial.println(t3);
 
-        // Altitude
-        double altCM = (double)baro.getHeightCentiMeters();
-        Serial.println("Alt:");
-        Serial.println(altCM);
+    // Heater
+    heatPad.setHeat(255);
 
-        // Temperature
-        double t1 = temp1.read();
-        double t2 = temp2.read();
-        double t3 = temp3.read();
-        Serial.println("Temps:");
-        Serial.println(t1);
-        Serial.println(t2);
-        Serial.println(t3);
+    //dataFile.println(logNumber + ", " + altCM + ", " + t1 + ", " + t2 + ", " + t3);
+    //String dataString = String(logNumber) + "," + String(altCM) + "," + String(t1) + "," + String(t2) + "," + String(t3);
 
-        // Heater
-        heatPad.setHeat(255);
+    //dataString = altCM;
+    Serial.print("This is t1: \n\t");
+    Serial.println(t1);
 
-        //dataFile.println(logNumber + ", " + altCM + ", " + t1 + ", " + t2 + ", " + t3);
-        //String dataString = String(logNumber) + "," + String(altCM) + "," + String(t1) + "," + String(t2) + "," + String(t3);
-
-        //dataString = altCM;
-        Serial.print("This is t1: \n\t");
-        Serial.println(t1);
-
-        Serial.print("This is string t1: \n\t");
-        String altString = String(t1);
-        Serial.println(altString);
+    Serial.print("This is string t1: \n\t");
+    String altString = String(t1);
+    Serial.println(altString);
 
 
-        // ***** Write stuff here!!
-        dataFile = SD.open("stuff.csv", FILE_WRITE); // ***** Open file with options!
-        if (dataFile) {
-            dataFile.println(altCM);
-            dataFile.close();
-        } else {
-            Serial.println("dataFile returned false (in loop!)");
-        }
-
-
-         // Close file
-        // dataFile.close(); // Close file
-        // dataFile.close(); // Close file
-        // dataFile.close(); // Close file
-        logNumber++;
-
+    // ***** Write rubbish here!!
+    dataFile = SD.open("rubbish.csv", FILE_WRITE); // ***** Open file with options!
+    if (dataFile) {
+        dataFile.println(altCM);
+        dataFile.close();
+    } else {
+        Serial.println("dataFile returned false (in loop!)");
+        dataFile.close();
     }
 
 
+     // Close file
+    // dataFile.close(); // Close file
+    // dataFile.close(); // Close file
+    // dataFile.close(); // Close file
+    logNumber++;
+
+    delay(1000);
 
 }
