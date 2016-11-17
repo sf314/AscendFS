@@ -30,8 +30,8 @@ void setup() {
     heatPad.setPin(3);
 
     temp1.setPin(0);
-    temp1.setPin(1);
-    temp1.setPin(2);
+    temp2.setPin(1);
+    temp3.setPin(2);
 
     // ***** Data logging setup
     pinMode(sdPin, OUTPUT);
