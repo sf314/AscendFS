@@ -107,12 +107,12 @@ void loop() {
 
 
         // ***** Write stuff here!!
-        dataFile = SD.open("lizard .csv", FILE_WRITE); // ***** Open file with options!
+        dataFile = SD.open("lizard.csv", FILE_WRITE); // ***** Open file with options!
         dataFile.println(altCM);
         dataFile.close(); // Close file
-        dataFile.close(); // Close file
-        dataFile.close(); // Close file
-        dataFile.close(); // Close file
+        // dataFile.close(); // Close file
+        // dataFile.close(); // Close file
+        // dataFile.close(); // Close file
         logNumber++;
         Serial.print("Hello ");
 
