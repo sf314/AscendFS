@@ -50,7 +50,7 @@ void setup() {
     if (usingSD) {Serial.println("Using SD!!!!!");}
 
     // **** Create file headers
-    dataFile = SD.open("lizard.csv", FILE_WRITE); // later, just call with filename
+    dataFile = SD.open("stuff.csv", FILE_WRITE); // later, just call with filename
     if (dataFile) {
         Serial.println("File opened successfully");
         dataFile.println("Col1, Col2, Col3, Col4, Col5");
@@ -73,6 +73,7 @@ void loop() {
         // Reset time
         previousTime = currentTime;
 
+        Serial.println("Hello there");
         Serial.println(logNumber);
 
         // Altitude
@@ -96,23 +97,29 @@ void loop() {
         //String dataString = String(logNumber) + "," + String(altCM) + "," + String(t1) + "," + String(t2) + "," + String(t3);
 
         //dataString = altCM;
-        Serial.print("This is rawTemp: ");
-        Serial.println(temp1.read());
+        Serial.print("This is t1: \n\t");
+        Serial.println(t1);
 
-        Serial.print("This is string rawTemp: ");
-        String altString = String(temp1.read());
+        Serial.print("This is string t1: \n\t");
+        String altString = String(t1);
         Serial.println(altString);
 
 
         // ***** Write stuff here!!
-        dataFile = SD.open("lizard.csv", FILE_WRITE); // ***** Open file with options!
-        dataFile.println(altCM);
-        dataFile.close(); // Close file
+        dataFile = SD.open("stuff.csv", FILE_WRITE); // ***** Open file with options!
+        if (dataFile) {
+            dataFile.println(altCM);
+            dataFile.close();
+        } else {
+            Serial.println("dataFile returned false (in loop!)");
+        }
+
+
+         // Close file
         // dataFile.close(); // Close file
         // dataFile.close(); // Close file
         // dataFile.close(); // Close file
         logNumber++;
-        Serial.print("Hello ");
 
     }
 
