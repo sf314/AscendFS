@@ -17,7 +17,6 @@ int logNumber = 1;
 
 // Data logging! (try formatting SD card to FAT16)
 File dataFile;
-String fileName = "the.csv";
 int sdPin = 10;
 
 void setup() {
@@ -44,7 +43,6 @@ void setup() {
             tries = -1;
             Serial.println("Attempting to use SD...");
             bool usingSD = true;
-            break;
         }
         tries--;
         delay(1000);
