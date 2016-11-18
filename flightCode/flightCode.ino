@@ -22,14 +22,17 @@ unsigned long previousTime = 0;
 long interval = 1000; // in ms
 
 void setup() {
+    Serial.begin(9600);
+    Wire.begin();
+    SPI.begin();
+
     baro.init();
     temp1.setPin(0);
     temp2.setPin(1);
     temp3.setPin(2);
 
-    Serial.begin(9600);
-    Wire.begin();
-    SPI.begin();
+    Serial.println("Hold up...");
+    delay(3000);
 
     pinMode(sdPin, OUTPUT);
 
@@ -39,19 +42,27 @@ void setup() {
         if (SD.begin()) {
             tries = -1;
             Serial.println("Attempting to use SD...");
-            bool usingSD = true;
-            break;
+            usingSD = true;
         }
         tries--;
         delay(1000);
     } // Should be set up now... if not, then problems.
-    if (usingSD) {Serial.println("Using SD!!!!!");}
+    delay(500);
+    if (usingSD) {
+        Serial.println("Using SD");
+    } else {
+        Serial.println("void setup(): sd check failed!");
+    }
 
     // **** Create file headers
-    dataFile = SD.open("sdtest9.csv", FILE_WRITE); // later, just call with filename
+    dataFile = SD.open(F("test3.csv"), FILE_WRITE); // later, just call with filename
     if (dataFile) {
         Serial.println("File opened successfully");
         dataFile.println("Col1, Col2, Col3, Col4, Col5");
+        dataFile.close();
+    } else {
+        Serial.println("void setup(): datFile returned false!");
+        delay(1000);
         dataFile.close();
     }
 }
@@ -63,15 +74,21 @@ void loop() {
     unsigned long currentTime = millis();
 
     if (currentTime - previousTime >= interval) { // If it's time, take data
-        // Do stuff
-        Serial.print("Loop ");
-        Serial.println(logNumber);
         // Reset time
         previousTime = currentTime;
 
+        // Do stuff
+        Serial.print("Looping test3.csv: ");
+
         Serial.println(logNumber);
 
-        dataFile = SD.open(F("sdtest10.csv"), FILE_WRITE); // ***** Open file, with options
+        dataFile = SD.open(F("test3.csv"), FILE_WRITE); // ***** Open file, with da options
+
+        if (dataFile) {
+            Serial.println("loop(): Accessing card...");
+        } else {
+            Serial.println("loop(): dataFile returned false");
+        }
 
         double data;
 
@@ -100,9 +117,12 @@ void loop() {
 
         dataFile.println();
         dataFile.close();
-        logNumber++;
-    }
 
+
+        logNumber++;
+    } else {
+        Serial.println("Potatoes!");
+    }
 }
 
 //3628ft bottom outside
