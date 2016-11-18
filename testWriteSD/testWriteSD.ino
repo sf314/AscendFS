@@ -40,7 +40,7 @@ void setup() {
     if (usingSD) {Serial.println("Using SD!!!!!");}
 
     // **** Create file headers
-    dataFile = SD.open("sdtest3.csv", FILE_WRITE); // later, just call with filename
+    dataFile = SD.open("sdt.csv", FILE_WRITE); // later, just call with filename
     if (dataFile) {
         Serial.println("File opened successfully");
         dataFile.println("Col1, Col2, Col3, Col4, Col5");
@@ -65,7 +65,7 @@ void loop() {
 
 
 
-        dataFile = SD.open("sdtest3.csv", FILE_WRITE); // ***** Open file, with options
+        dataFile = SD.open("sdt.csv", FILE_WRITE); // ***** Open file, with options
         dataFile.println("Hello there, 1, 2, 3");
         dataFile.println(logNumber);
         dataFile.println(temp1.read());
