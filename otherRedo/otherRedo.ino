@@ -11,8 +11,7 @@
 #include <IntersemaBaro.h>
 
 File dataFile;
-int sdPin = 10;
-int sdCSPin = 4; // 10 on Uno
+int sdPin = 4;
 int baroPin = 2;
 int heatPin = 3;
 int logNumber = 1;
@@ -25,20 +24,33 @@ unsigned long previousTime = 0;
 long interval = 1000; // in ms
 
 void setup() {
+
+    pinMode(10, OUTPUT);
+    pinMode(4, OUTPUT);
+    pinMode(baroPin, OUTPUT);
+    pinMode(heatPin, OUTPUT);
+
     Serial.begin(9600);
     delay(3000);
     Serial.println("Starting setup");
     Wire.begin();
     SPI.begin();
+
+
+    digitalWrite(sdPin, LOW);
+    digitalWrite(baroPin, HIGH);
+    delay(50);
     baro.init();
+    delay(50);
+    digitalWrite(baroPin, LOW);
+    digitalWrite(sdPin, HIGH);
+    delay(50);
 
 
     Serial.println("Holdup");
     delay(3000);
 
-    pinMode(sdPin, OUTPUT);
-    pinMode(baroPin, OUTPUT);
-    pinMode(heatPin, OUTPUT);
+
 
 
     int tries = 5;
@@ -72,6 +84,7 @@ void setup() {
 }
 
 
+long alt = 0;
 
 void loop() {
     // Check if interval of time has passed
@@ -80,6 +93,7 @@ void loop() {
     if (currentTime - previousTime >= interval) { // If it's time, take data
         // Reset time
         previousTime = currentTime;
+
 
         dataFile = SD.open("sdt7.csv", FILE_WRITE); // ***** Open file, with options
         dataFile.print(logNumber);
@@ -94,13 +108,24 @@ void loop() {
         dataFile.print(readTemp(2));
         dataFile.print(",");
 
-        double alt = (double)baro.getHeightCentiMeters();
         Serial.println(alt);
         dataFile.println(alt);
 
         dataFile.close();
         logNumber++;
         //analogWrite(heatPin, 255);
+
+
+        digitalWrite(sdPin, LOW);
+        digitalWrite(baroPin, HIGH);
+        delay(50);
+
+        alt = (double)baro.getHeightCentiMeters();
+
+        delay(50);
+        digitalWrite(baroPin, LOW);
+        digitalWrite(sdPin, HIGH);
+        delay(50);
     }
 
 }
